@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Eyes</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f5f4f0;
+    overflow:hidden;
+}
+
+.face{
+    display:flex;
+    gap:60px;
+}
+
+.eye{
+    width:180px;
+    height:180px;
+    background:white;
+    border-radius:50%;
+    position:relative;
+    border:8px solid #222;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+.pupil{
+    width:55px;
+    height:55px;
+    background:#111;
+    border-radius:50%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+.pupil::after{
+    content:"";
+    width:15px;
+    height:15px;
+    background:white;
+    border-radius:50%;
+    position:absolute;
+    top:10px;
+    left:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="face">
+    <div class="eye">
+        <div class="pupil"></div>
+    </div>
+
+    <div class="eye">
+        <div class="pupil"></div>
+    </div>
+</div>
+
+<script>
+const pupils = document.querySelectorAll('.pupil');
+
+document.addEventListener('mousemove', (e) => {
+
+    pupils.forEach(pupil => {
+
+        const eye = pupil.parentElement;
+        const rect = eye.getBoundingClientRect();
+
+        const eyeX = rect.left + rect.width / 2;
+        const eyeY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(
+            e.clientY - eyeY,
+            e.clientX - eyeX
+        );
+
+        const distance = 45;
+
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        pupil.style.transform =
+            `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+    });
+});
+</script>
+
+</body>
+</html>
